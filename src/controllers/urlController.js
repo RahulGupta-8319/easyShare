@@ -80,7 +80,7 @@ const createUrl = async function (req, res) {
         }
 
 
-        const urlcode = shortid.generate()
+        const urlcode = shortid.generate().toLowerCase()
         const shorturl = `http://${req.get("host")}/${urlcode}`
         const savedata = {
             "longUrl": longUrl,
