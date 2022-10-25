@@ -102,6 +102,8 @@ const createUrl = async function (req, res) {
 const getUrl = async function (req, res) {
     try {
         let urlcode1 = req.params.urlCode
+        if(shortid.isValid(urlcode1)) return res.status(400).send({status:false, message:"UrlCode Is InValid"})
+        
         let urlcode = await GET_ASYNC(`${urlcode1}`)
 
         if (urlcode) {
