@@ -2,7 +2,8 @@ const validUrl = require('valid-url');
 const urlmodel = require("../models/urlmodel")
 const shortid = require('shortid');
 const redis = require("redis")
-const { promisify } = require("util")
+const { promisify } = require("util");
+const { access } = require('fs');
 
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false
@@ -17,11 +18,11 @@ let urlRegex = "((http|https)://)(www.)?"
 
 
 const redisClient = redis.createClient(
-    11463,
-    "redis-11463.c301.ap-south-1-1.ec2.cloud.redislabs.com",
+    12941,
+    "redis-12941.c264.ap-south-1-1.ec2.cloud.redislabs.com",
     { no_ready_check: true }
 );
-redisClient.auth("I7PEnFrz6bJlx5S4m4ONGocHy6Zz97tP", function (err) {
+redisClient.auth("107cNmebPHBxXnLDFZqwpZrIppJESJzH", function (err) {
     if (err) throw err;
 });
 
@@ -44,14 +45,16 @@ const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 
 
 const createUrl = async function (req, res) {
+    res.header('Access-Control-Allow-Credentials', '*');
     try {
+         console.log(req.body);
         if (!Object.keys(req.body).length > 0) {
             return res.status(400).send({ status: false, message: "Please provide some data in body" })
         }
 
-        if (Object.keys(req.body).length > 1) {
-            return res.status(400).send({ status: false, message: "Please provide only longUrl" })
-        }
+        // if (Object.keys(req.body).length > 1) {
+        //     return res.status(400).send({ status: false, message: "Please provide only longUrl" })
+        // }
         let { longUrl} = req.body
         if (!isValid(longUrl)) {
             return res.status(400).send({ status: false, message: "longUrl is required" })
